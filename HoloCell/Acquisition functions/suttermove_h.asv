@@ -1,0 +1,25 @@
+function suttermove_h()
+global ExpStruct Exp_Defaults
+
+obj=ExpStruct.MP285struct.cam;
+coor=ExpStruct.MP285struct.barrelcoordinates;
+order=ExpStruct.MP285struct.trialorder;
+barrelnum=ExpStruct.MP285struct.barrelnum;
+% coor
+% order(mod(argin,barrelnum)+1)
+% coor(:,order(mod(argin,barrelnum)+1))
+% time = moveTo(cam,bc(trialorder(currentstimtrial),:)');
+
+nextpos=coor(:,order(mod(ExpStruct.sweep_counter,barrelnum)+1));
+% time = moveTo(obj,coor(order(mod(ExpStruct.sweep_counter,barrelnum)),:)');
+time = moveTo(obj,nextpos);
+% display(['Trial ' num2str(currentstimtrial) ' of ' num2str(totalstimnum)]) 
+% currentstimtrial = currentstimtrial +1;
+% 
+% if currentstimtrial >totalstimnum
+%     display('Done')
+%     armed == 0;
+%     currentstimtrial = 1;
+% end
+% end
+end

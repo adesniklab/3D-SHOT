@@ -1,4 +1,8 @@
 function  [cent, varargout]=FastPeakFind(d, thres, filt ,edg, res, fid)
+
+% not our work - downloaded from matlab file exchanges!  
+%https://www.mathworks.com/matlabcentral/fileexchange/37388-fast-2d-peak-finder
+
 % Analyze noisy 2D images and find peaks using local maxima (1 pixel
 % resolution) or weighted centroids (sub-pixel resolution).
 % The code is designed to be as fast as possible, so I kept it pretty basic.

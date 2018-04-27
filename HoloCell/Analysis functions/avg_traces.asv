@@ -1,0 +1,36 @@
+%Analysis functions
+
+
+function avg_traces(~)
+    
+global sweeps ExpStruct h
+    prompt = {'Enter first sweep:', 'Enter last sweep:'}; %'type:'};
+    dlg_title = 'Input sweep bounds';
+    num_lines=1;
+    def = {'1','10'};
+    answer=inputdlg(prompt, dlg_title, num_lines, def);
+    first=str2num(answer{1});
+    last=str2num(answer{2});
+ 
+        average_trace1=zeros(length(sweeps{first}),1); 
+        average_trace2=zeros(length(sweeps{first}),1); 
+        for (i=first:last)
+            tempsweep=sweeps{i}; tempsweep1=tempsweep(:,1);
+            % zero each trace
+            tempsweep=tempsweep-mean(tempsweep(1:100));
+            % update the averag trace
+            average_trace=average_trace+tempsweep;
+        end
+    average_trace=average_trace/(last-first);
+    % zero the averaged trace
+    baseline=average_trace(1:100); baseline=mean(baseline);
+    average_trace=average_trace-baseline;
+    
+    plot(h.sweep_display_axes,ExpStruct.timebase,average_trace(:,1));
+    
+end
+
+    
+    
+    
+    

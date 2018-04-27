@@ -1,4 +1,7 @@
 function [Setup ] = function_loadparameters(varargin)
+
+% This is the calibration file in which you need to specify how to controll
+% all the hardware. Configuration varies entirely on each setup.
 addpath('SLM_Code');
 addpath('NOVOCGH_Code');
 addpath('Basler');
@@ -21,24 +24,16 @@ if numel(varargin) == 1
         try clear('Setup.DAQ'); catch; end
         Setup.Holodaq.Name = 'due' ;
         Setup.DAQ = arduino('COM8','Due','Trace',false); % initialize session
-        %Fs=10000;
-        %Setup.DAQ.Rate = Fs ;
-       % Setup.DAQ.DurationInSeconds = 2/Fs;
-        %addDigitalChannel(Setup.DAQ,Setup.Holodaq.Name,'port0/line2','InputOnly');
         Setup.Holodaq.DAQReady=1;
     else
         disp('invalid option, you neocon scallywag');
     end
-    
-    
 else
     Setup.Holodaq.DAQReady=0;
 end
 
 Setup.BaslerCameraID =0;
-
 Setup.CGHMethod = 3; % Select 1 for superoposition, 2 for GGS, 3 for novocgh, 4 for 2P NovoCGH
-
 Setup.SLM.bit_depth = 12; %For the 512L bit depth is 16, for the small 512 bit depth is 8
 Setup.SLM.num_boards_found = libpointer('uint32Ptr', 0);
 Setup.SLM.constructed_okay = libpointer('int32Ptr', 0);
@@ -48,13 +43,7 @@ Setup.SLM.use_GPU = 0;
 Setup.SLM.max_transients = 10;
 Setup.SLM.external_Pulse = 1;
 Setup.SLM.timeout_ms = 5000;
-% Setup.SLM.lut_file = 'C:\Program Files\Meadowlark Optics\Blink OverDrive Plus\LUT Files\slm4610_at1064_PCIe.lut';%was working but designed for different SLM(512)
-% Setup.SLM.lut_file = 'C:\Program Files\Meadowlark Optics\Blink OverDrive Plus\LUT Files\linear.LUT'; %linear Lut
-% Setup.SLM.lut_file = 'C:\Program Files\Meadowlark Optics\Blink OverDrive
-% Plus\LUT Files\slm4610_FromNico_PCIe.lut';%2/26/18 Lut File Wasn't working
-Setup.SLM.lut_file = 'C:\Program Files\Meadowlark Optics\Blink OverDrive Plus\LUT Files\slm4610_DataFromNico_Ref0.lut';%2/26/18 improved
-
-
+Setup.SLM.lut_file = 'Meadowlark Optics\Blink OverDrive Plus\LUT Files\slmLutFile.lut';
 Setup.SLM.reg_lut = libpointer('string');
 Setup.SLM.true_frames = 3;
 Setup.SLM.pixelmax = 190;
@@ -66,7 +55,6 @@ Setup.SLM.State =0;
 [ Setup.SLM ] = Function_Start_SLM( Setup.SLM );
 [ Setup.SLM ] = Function_Feed_SLM( Setup.SLM, Hologram);
 Function_Stop_SLM( Setup.SLM );
-
 
 % Specify system for computation of hologramsparameters here
 Setup.verbose=1;           % 1 or 0    Set this value to 1 to display activity, 0 otherwise
@@ -87,13 +75,9 @@ NormOptions.LowThreshold = 0.1;
 %general.
 Setup.intensity = 1;
 Setup.source = sqrt(Setup.intensity)*(1/(Setup.Nx* Setup.Ny))*ones(Setup.Nx, Setup.Ny);
-
 Setup.Datapath = 'Calib_Data';
 Setup.Displaypath = 'Calib_Displays';
-
 Setup.Sutterport = 'COM6';
-
-Setup.Holorequestpath = '\\adesnik2.ist.berkeley.edu\inhibition\holography\FrankenRig\HoloRequest\';
-
+Setup.Holorequestpath = 'HoloRequest\';
 end
 

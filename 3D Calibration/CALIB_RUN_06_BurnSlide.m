@@ -1,12 +1,6 @@
 try function_close_sutter( Sutter );     [Setup.SLM ] = Function_Stop_SLM( Setup.SLM ); end
-
-clear all;
-close all;
-clc;
-
-%[Setup ] = function_loadparameters(1);
+clear all;close all;clc;
 [Setup ] = function_loadparameters(2);
-
 
 %Overwrite delay duration
 Setup.TimeToPickSequence = 2;
@@ -20,7 +14,7 @@ Sutter.Reference = getPosition(Sutter.obj);
 load([Setup.Datapath '\05_XYZ_Alignment_Holograms.mat']); pause(0.1);
 clc; disp('List of avaialble calibrations :')
 for j = 1:numel(Calibrations.Zooms)
-fprintf(['Calib #' int2str(j) ', Optotune depths:' int2str(Calibrations.ODepths{j}) ', at Zoom : ' num2str(Calibrations.Zooms{j})]); disp(' ');
+    fprintf(['Calib #' int2str(j) ', Optotune depths:' int2str(Calibrations.ODepths{j}) ', at Zoom : ' num2str(Calibrations.Zooms{j})]); disp(' ');
 end
 selectcalib = input('Enter the calibration number you want to record ; ->');
 disp([' Please record data in subfolder "Calib_Data/' int2str(selectcalib) '/"'])
@@ -43,8 +37,7 @@ while counter <=LZ
     Sutter.Reference = getPosition(Sutter.obj);
     position = Sutter.Reference;
     position(3) = position(3) + SLM.Depths.True(counter);
-    moveTime=moveTo(Sutter.obj,position);  
-    
+    moveTime=moveTo(Sutter.obj,position);
     Setup.SLM.wait_For_Trigger= 1;
     [Setup.SLM ] = Function_Stop_SLM( Setup.SLM );
     [ Setup.SLM ] = Function_Start_SLM( Setup.SLM );
@@ -52,18 +45,14 @@ while counter <=LZ
     for i = 1:LP
         sequences{1}{i} = SLM.Hologram{counter,i};
     end
-    
-    
-    
-    
-    Function_shoot_sequences_due(Setup,sequences,1);  %changed 2018 02 16 for use with Arduino Due Triggering
-    %Function_shoot_One_sequences(Setup,sequences);
+    Function_shoot_sequences_due(Setup,sequences,1);  
     [Setup.SLM ] = Function_Stop_SLM( Setup.SLM );
     h = input('Enter 1 to continue, 0 to redo ->');
     if h == 1;
         counter = counter+1;
     end
 end
+
 position = Sutter.Reference; moveTime=moveTo(Sutter.obj,position);
 function_close_sutter( Sutter );
 

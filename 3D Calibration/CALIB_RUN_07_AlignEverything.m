@@ -1,12 +1,8 @@
 clear all;close all;clc;
-
-
-
 [Setup ] = function_loadparameters();
 load([Setup.Datapath '\05_XYZ_Alignment_Holograms.mat'])
 load([Setup.Datapath '\04_All_Z_Calibration_Data.mat'],'COC')
 try; load([Setup.Datapath '\07_XYZ_Calibration.mat'],'COC','Points'); catch; disp('COC not found'); end;
-
 Ucalibs  =input('Enter the ID number of the calibration you would like to do/redo -> '); %place here the number of number of calibrations you want to do
 try
     load([ Setup.Datapath '\DATA_05_Calibration.mat'], 'COC');
@@ -14,9 +10,7 @@ try
 catch
     disp('No existing calibration found');
 end
-
 thezoom = Calibrations.Zooms{Ucalibs};
-
 
 % Build list of datapaths
 for ii = Ucalibs
@@ -30,7 +24,6 @@ for ii = Ucalibs
         end
     end
 end
-
 [imG, imR]=bigread3(datpath{Ucalibs(1),1});
 data = sum(imR,3); data = max(data(:))-data;
 data = imgaussfilt(data,3);
@@ -42,7 +35,6 @@ radius = sqrt(mean(var(w)));
 close(f)
 [LX,LY] = size(data);
 
-
 for ii = Ucalibs
     SLM = Calibrations.SLM{ii};
     Points.SLM{ii} = [];
@@ -50,10 +42,8 @@ for ii = Ucalibs
     LN = numel( SLM.Depths.SLM);
     for j = 2:LN
         [imG, imR]=bigread3(datpath{ii,j});
-        
         data = sum(imR,3); data = max(data(:))-data;
         data = imgaussfilt(data,3);
-        
         f = figure('units','normalized','outerposition',[0 0 1 1]);
         subplot(1,2,2); scatter(-SLM.XList,-SLM.YList);  axis([-1 0 -1 0]);title(datpath{ii,j})
         subplot(1,2,1); imagesc(flipud(fliplr(data))); title('First select here, then press n for next, q to quit, anything else to redo'); hold on;
@@ -67,8 +57,7 @@ for ii = Ucalibs
           %  ey = min(floor(xt+radius),LY);
           %  mask = data-data; mask(bx:ex,by:ey) = data(bx:ex,by:ey);
           %  [yt, xt] = function_findcenter(mask);
-            scatter(xt,yt,'green');
-            
+            scatter(xt,yt,'green');   
             waitforbuttonpress; v = get(gcf,'CurrentCharacter');
             if v == 'n'
                 y(subcounter,1) = yt; x(subcounter,1) = xt;
@@ -76,8 +65,6 @@ for ii = Ucalibs
                 scatter(x,y,'red','filled'); hold on;
             end
         end
-        
-        
         subplot(1,2,2); title('Now select corresponding point here, leave by clicking on the left graph')
         subcounter=0;xx=x-x;yy=y-y;
         for k = 1:numel(x)
@@ -108,19 +95,15 @@ for ii = Ucalibs
         Points.SI{ii} = [Points.SI{ii} ;[x y z]];
         counter = counter+1;
         close(f)
-    end
-    
-    
+    end   
     Points.RealDepths{ii} = SLM.Depths.True;
     Points.Calibrationdepths{ii} = SLM.Depths.SI;
     COC.Zooms{ii} = thezoom;
 end
 
-%alan added 12/16 to compensate for flipup(fliplr())
 Points.SI{ii}(:,1)=512-Points.SI{ii}(:,1);
 Points.SI{ii}(:,2)=512-Points.SI{ii}(:,2);
 save([Setup.Datapath '\DATA_07_XYZ_Calibration.mat'],'Points');
-
 modelterms.XY = [0 0 0; 1 0 0; 0 1 0; 0 0 1;1 1 0; 0 1 1 ; 1 0 1; 0 0 2; 2 0 0; 0 2 0; 2 1 0; 2 0 1; 1 2 0 ; 1 0 2; 0 1 2 ; 0 2 1];     %XY spatial calibration model for C_Of_C between SLM and true space
 modelterms.Z = [0 0 0; 0 0 1; 0 0 2; 0 0 3; 0 0 4 ;0 1 0; 1 0 0];
 
@@ -146,5 +129,4 @@ xlabel('X - SI');  ylabel('Y - SI');  zlabel('Z - Optotune'); title(['Zoom = ' n
 legend({'Recorded','Interpolation'})
 pause(6)
 saveas(g,[Setup.Displaypath '\_07_XYZ_Calibration.fig'])
-
 save([Setup.Datapath '\07_XYZ_Calibration.mat'],'COC','Points')

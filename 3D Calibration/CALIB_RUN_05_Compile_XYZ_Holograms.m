@@ -1,10 +1,10 @@
 clear all;close all;clc;
 [Setup ] = function_loadparameters();
 load([Setup.Datapath '\04_All_Z_Calibration_Data.mat'])
-%try; load('07_XYZ_Calibration','COC') catch; disp('I dont know where COC is'); end;
 
-SLM.RangeX = 0.25;
-SLM.RangeY = 0.3;%0.25;
+try; load('07_XYZ_Calibration','COC') catch; disp('I dont know where Change of Coordinates file is !'); end;
+SLM.RangeX = 0.25; %Range in X form 0 to 0.5
+SLM.RangeY = 0.3;
 SLM.XYNP = 13 ; %Number of random points in maze
 
 Calibrations.ODepths = {[0:10:70],[0:10:70]};%{linspace(0,90,10),linspace(0,90,10)};
@@ -26,11 +26,9 @@ while done == 0;
 end
 
 
-
 for i = 1:numel(Calibrations.Zooms)
 SLM.Depths.SI = Calibrations.ODepths{i};
 SLM.Depths.True = polyvaln(COC.Z_SI_TRUE ,SLM.Depths.SI);
-%XYZ.Depths.SLM = polyvaln(COC.Z_TRUE_SLM ,SLM.Depths.True);
 SLM.Depths.SLM = polyvaln(COC.Z_SI_SLM ,SLM.Depths.SI);
 LN = numel(SLM.Depths.SI);
 SLM.Hologram = {};

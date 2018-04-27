@@ -447,20 +447,20 @@ warning = 0;
 
 % if you have a wrong number for the objective...
 if isempty(intersect(handles.objective,[4 20 40])) == 1;
-    errordlg('Objective Must be equal to 4, 20, or 40.  Bro, even a preschooler can get this right most of the time');
+    errordlg('Objective Must be equal to 4, 20, or 40');
     warning = 1;
 end;
 
 %if you didnt specify a zoom....
 if isempty('handles.zoom') == 1;
-    errordlg('set zoom or I will eat your face');
+    errordlg('set zoom');
     warning = 1;
 end;
 
 %if you didnt select all ROIs and you didnt specify any ROIs....
 if handles.selectAllROIs == 0;
     if isfield(handles,'rois') == 0;
-        errordlg('select at least one ROI, you Trump-voter')
+        errordlg('select at least one ROI')
         warning = 1;
     end;
 end;
@@ -472,14 +472,14 @@ end;
 
 % if you selected both generate grid and generate XYZ
 if handles.generateGrid == 1 && handles.generateXYZ ==1;
-    errordlg('select either grid OR XYZ, you Malodorous Pervert')
+    errordlg('select either grid OR XYZ')
     warning = 1;
 end;
 
 % if you selected a grid, you have to only have one ROI
 if handles.generateGrid == 1;
     if numel(handles.rois)>1;
-        errordlg('select only 1 ROI from which to make a grid, fart guzzler');
+        errordlg('select only 1 ROI from which to make a grid');
         warning = 1;
     end;
 end;
@@ -487,7 +487,7 @@ end;
 % if you generate an XYZ sequence, you have to have only one ROI
 if handles.generateXYZ == 1;
     if numel(handles.rois)>1;
-        errordlg('select only 1 ROI from which to make a XYZ map, you nincompoop');
+        errordlg('select only 1 ROI from which to make a XYZ map');
         warning = 1;
     end;
 end;
@@ -500,13 +500,13 @@ end;
 
 if isfield(handles,'rois');
     if (isempty(strmatch(handles.hologram_config,'paramaterSpace'))==0) && (numel(handles.rois)>1);
-        errordlg('if you want to cycle through paramater space, select only one holo, brah');
+        errordlg('if you want to cycle through paramater space, select only one holo');
         warning = 1;
     end;
 end;
 
 if numel(strmatch(handles.hologram_config,'paramaterSpace'))>0 && ( (handles.generateGrid ==1) || (handles.generateXYZ ==1));
-    errordlg('if you want to cycle through paramater space, then you cant generate a grid or xyz matrix doooofus');
+    errordlg('if you want to cycle through paramater space, then you cant generate a grid or xyz matrix');
     warning = 1;
 end;
 
@@ -525,17 +525,17 @@ end;
 
 
 if handles.selectAllROIs == 1 && handles.excludeROIs == 1
-    errordlg('make up you mind, either select all or exclude!  I will murder you in your sleep tonight')
+    errordlg('make up you mind, either select all or exclude!')
     warning = 1;
 end;
 
 if isfield(handles,'rois') == 1  ;
     if handles.excludeROIs == 1 && numel(handles.rois)==0;
-        errordlg('select at least one ROI, shit eater')
+        errordlg('select at least one ROI')
         warning = 1;
     end;
 elseif isfield(handles,'rois') == 0 && handles.excludeROIs == 1
-    errordlg('select at least one ROI.  You smell like a mouse cage.')
+    errordlg('select at least one ROI.')
     warning = 1;
     
 end;
@@ -544,13 +544,13 @@ end;
 if numel(strmatch(handles.hologram_config,'custom'))>0
     if (handles.donutFactor > 1) || (handles.donutFactor < 0);
         
-        errordlg('donut factor should be between 0 and 1.  Your mother was a hampster!')
+        errordlg('donut factor should be between 0 and 1')
         warning = 1;
     end;
     
     if (handles.shrinkingFactor > 1) || (handles.shrinkingFactor < 0);
         
-        errordlg('shrinking factor should be between 0 and 1.  Your father smelt of elderberries!')
+        errordlg('shrinking factor should be between 0 and 1')
         warning = 1;
     end;
     
@@ -563,16 +563,16 @@ if isfield(handles,'rois')==1
         elements=cat(2,elements,handles.rois{n});
     end;
 else
-    errordlg('shit man, select an roi already!')
+    errordlg('select an roi!')
 end;
 
 if max(elements)>numel(handles.ROIdata.ROIdata.rois);
-    errordlg('ROI requested that does not exist in ROIdata.  Also your mother is a whore');
+    errordlg('ROI requested that does not exist in ROIdata');
     warning = 1;
 end;
 
 if min(elements)<1;
-    errordlg('ROI requested that does not exist in ROIdata.  Also your mother is a whore');
+    errordlg('ROI requested that does not exist in ROIdata');
     warning = 1;
 end;
 
@@ -609,28 +609,6 @@ end
         locations = FrankenScopeRigFile();
         load([locations.HoloRequest 'ROIdata.mat']);
         
-        
-   %    disp('warning: optotune depth hack enabled.  check line 608 to disable')
-       %optotnue depth out of alignment .  we cant figure it out.  this is
-       %easier than actually sciencing.
-%        for u = 1:numel(ROIdata.rois);
-%          if ROIdata.rois(u).OptotuneDepth==17;
-%                ROIdata.rois(u).OptotuneDepth=23; 
-%          elseif ROIdata.rois(u).OptotuneDepth==28;
-%                ROIdata.rois(u).OptotuneDepth=33;   
-%          elseif ROIdata.rois(u).OptotuneDepth==36;
-%                ROIdata.rois(u).OptotuneDepth=39;
-%          elseif  ROIdata.rois(u).OptotuneDepth~=0;
-%              errordlg('WARNING: not a calibrated optotune depth! Z interp likely to fail!')
-%              %return;
-%          end
-%        end
-       
-             
-               
-       % errordlg('Hard Coded -5 um Y offset to account for misalignment - line 641')
-
-        
         for j = 1:numel(ROIdata.rois);
        
             ROIdata.rois(j).vertices=[];
@@ -640,11 +618,6 @@ end
             x=ROIdata.rois(j).centroid(1);
             y=ROIdata.rois(j).centroid(2);
             
-            %y = y - (5*(512/ly));  %delete this if you ever fix alignment
-            
-            %r= desired radius
-            %x = x coordinates of the centroid
-            %y = y coordinates of the centroid
             th = 0:pi/10:2*pi;
             xunit = r * cos(th) + x;
             yunit = r * sin(th) + y;
@@ -665,23 +638,10 @@ end
     end;
     
     if handles.correctPower
-%         if strcmp(handles.hologram_config,'DLS'); TF=1; else; TF=0; end;
-%         for j = 1:numel(ROIdata.rois)
-%             ROIlocation(1:2)=ROIdata.rois(j).centroid;
-%             ROIlocation(3)=0;  % on focal plane - ADJUST
-%             
-%             ScaleFactors(j)=ScaleEnergy(ROIlocation,locations,TF);
-%             
-%         end
-%         
-%        holoRequest.PowerAttenuation=ScaleFactors;
     disp('Power Correction with old interpolant currently disabled')
     holoRequest.PowerAttenuation=ones(numel(ROIdata.rois),1);
-
     else
         holoRequest.PowerAttenuation=ones(numel(ROIdata.rois),1);
-
-        
     end
 
 %%
@@ -694,13 +654,7 @@ if warning == 0;
     MODxSpacing = (handles.xSpacing/lx)*512;
     MODySpacing = (handles.ySpacing/ly)*512;
     
-    
-%     %
-%         errordlg('SpecialGrid = 1 (line 697)')
-%         holoRequest.specialGrid = 1;  % if 1 will only apply grid to ROI1
-     
    holoRequest.specialGrid = 0;
-     
      
     %generate output file
     holoRequest.reload = handles.reload;
@@ -710,7 +664,6 @@ if warning == 0;
     if handles.selectAllROIs ==1;
         handles.rois={[1:numel(handles.ROIdata.ROIdata.rois(:))]};
     end
-    
 
     iiv=1; toDel=[];
     for u = 1:numel(handles.rois);
@@ -728,7 +681,7 @@ if warning == 0;
     
     % if we are scaling factor
     if ~isempty(holoRequest.PowerAttenuation)
-        disp('line 711 power correction disabled until I can figure out whats going on')
+        disp('line 711 power correction disabled- old functionality')
 %         for j = 1:numel(holoRequest.rois);
 %             clear Scaled toScale;
 %             thisHolo=holoRequest.rois{j};
@@ -764,7 +717,7 @@ if warning == 0;
     holoRequest.cycleSequence = handles.cycleSequence;
     
     
-    %% generate random list (nico...)
+    %% generate random list
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     NXYZ = [holoRequest.points.x,holoRequest.points.y,holoRequest.points.z];
@@ -1051,10 +1004,6 @@ end
 guidata(hObject, handles);
 
 
-% Hint: get(hObject,'Value') returns toggle state of cycleCB
-
-
-
 
 % --- Executes on button press in seq.
 function seq_Callback(hObject, eventdata, handles)
@@ -1069,9 +1018,6 @@ else
 end;
 guidata(hObject,handles);
 % Hint: get(hObject,'Value') returns toggle state of seq
-
-
-
 
 
 

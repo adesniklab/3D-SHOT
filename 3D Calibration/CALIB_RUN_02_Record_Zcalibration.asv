@@ -98,8 +98,7 @@ pause(1);
 close(f);
 Refined.micronsperpixel = 50/sqrt((yy-y)^2+(xx-x)^2);
 %The purpose of this intermediate step is to measure the true dimensions of
-%the data measured by the substage camera by recording two pictures with a
-%50 micron displacement. The conversion data is in microns per pixel.
+%
 
 
 CalibZ.TrueZ = linspace(0,0,CalibZ.N);
@@ -135,7 +134,7 @@ for i = 1:CalibZ.N
     hold on;
     ff = fit(UZ', mminivec, 'gauss1');
     plot(ff);
-    title(['FWHM = ' num2str(ff.c1*Refined.micronsperpixel)]);
+    title(['FWHM = ' num2str(ff.c1*2.355)]);
     hold off;
     legend('off')
 end

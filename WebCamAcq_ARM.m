@@ -3,7 +3,6 @@ savedir='C:\Users\slmadesnik\Desktop\data\alan\';
 recordDuration = 15; %second
 basename = 'Demo';
 
-
 obj=imaq.VideoDevice;
 vid=videoinput('winvideo');
 vid.LoggingMode='disk';

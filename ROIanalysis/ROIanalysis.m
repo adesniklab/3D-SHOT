@@ -1,4 +1,6 @@
 function ROIanalysis(ImageFile, ExperimentFile, ROIFile, varargin)
+%  Written by Evan Lyall.   
+
 % ROIANALYSIS Circle ROIs in imaging data as well as and/or create
 % presentable data.
 %

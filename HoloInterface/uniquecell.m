@@ -1,4 +1,10 @@
 function [Au, idx ,idx2] = uniquecell(A)
+
+    %useful utility file - NOT OUR WORK: Credit =   
+    %version 1.0 (1.4 KB) by Patrick Mineault
+
+    %https://www.mathworks.com/matlabcentral/fileexchange/31718-unique-elements-in-cell-array
+
     %function [Au, idx, idx2] = uniquecell(A)
     %For A a cell array of matrices (or vectors), returns 
     %Au, which contains the unique matrices in A, idx, which contains
